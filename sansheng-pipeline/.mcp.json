@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "sansheng": {
+      "command": "node",
+      "args": [
+        "/Users/liweizhao/.claude/plugins/sansheng-pipeline/mcp-server/dist/mcp-server.cjs"
+      ],
+      "disabled": false
+    }
+  }
+}

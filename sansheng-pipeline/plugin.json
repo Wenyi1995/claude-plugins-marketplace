@@ -1,0 +1,81 @@
+{
+  "name": "sansheng-pipeline",
+  "version": "0.3.0",
+  "description": "三省六部审议流程插件（MCP Server 版）",
+  "author": "liweizhao",
+  "license": "MIT",
+  "skills": [
+    {
+      "name": "pipeline",
+      "path": "skills/pipeline/SKILL.md",
+      "description": "启动三省六部完整审议流程"
+    }
+  ],
+  "agents": [
+    {
+      "id": "sililijian",
+      "name": "司礼监",
+      "role": "流程协调者",
+      "workspace": "agents/sililijian"
+    },
+    {
+      "id": "zhongshu",
+      "name": "中书省",
+      "role": "方案规划者",
+      "workspace": "agents/zhongshu"
+    },
+    {
+      "id": "menxia",
+      "name": "门下省",
+      "role": "方案审议者",
+      "workspace": "agents/menxia"
+    },
+    {
+      "id": "shangshu",
+      "name": "尚书省",
+      "role": "任务派发者",
+      "workspace": "agents/shangshu"
+    },
+    {
+      "id": "libu-personnel",
+      "name": "吏部",
+      "role": "Agent 人事管理",
+      "workspace": "agents/libu1-personnel"
+    },
+    {
+      "id": "hubu-resources",
+      "name": "户部",
+      "role": "Agent 运行资源保障",
+      "workspace": "agents/hubu-resources"
+    },
+    {
+      "id": "libu-rites",
+      "name": "礼部",
+      "role": "知识沉淀与文化传承",
+      "workspace": "agents/libu2-rites"
+    },
+    {
+      "id": "bingbu-military",
+      "name": "兵部",
+      "role": "任务实际执行",
+      "workspace": "agents/bingbu-military"
+    },
+    {
+      "id": "xingbu-justice",
+      "name": "刑部",
+      "role": "质量检查与合规审查",
+      "workspace": "agents/xingbu-justice"
+    },
+    {
+      "id": "gongbu-works",
+      "name": "工部",
+      "role": "系统集成与基础设施",
+      "workspace": "agents/gongbu-works"
+    }
+  ],
+  "mcp_servers": [
+    ".mcp.json"
+  ],
+  "dependencies": [],
+  "claude_code_version": ">=1.0.0"
+}

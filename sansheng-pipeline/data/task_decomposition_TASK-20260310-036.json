@@ -1,0 +1,107 @@
+{
+  "task_id": "TASK-20260310-036",
+  "task_title": "实时监控面板 - Agent 状态与 Token 追踪",
+  "plan_version": 2,
+  "decomposed_at": "2026-03-10T16:40:00",
+  "execution_mode": "serial",
+  "subtasks": [
+    {
+      "subtask_id": "SUB-036-001",
+      "title": "开发监控工具核心功能（monitor.py）",
+      "assigned_to": "gongbu-works",
+      "type": "implementation",
+      "priority": 1,
+      "dependencies": [],
+      "description": "实现监控工具的核心功能模块",
+      "deliverables": [
+        "bin/monitor.py - 完整可执行脚本（200+ 行）",
+        "包含 4 个核心函数：collect_task_status(), collect_token_stats(), render_dashboard(), main_loop()",
+        "Rich TUI 渲染，5 秒刷新机制",
+        "完整异常处理（4 种场景）"
+      ],
+      "acceptance_criteria": [
+        "能显示任务列表（6 项功能验收）",
+        "数据采集延迟 < 500ms",
+        "界面刷新流畅（> 10fps）",
+        "异常处理完整（文件不存在、JSON 解析失败、Rich 库缺失、终端尺寸异常）",
+        "可执行权限（chmod +x）"
+      ],
+      "estimated_hours": 3,
+      "technical_notes": [
+        "数据源：~/.claude/plugins/sansheng-pipeline/data/tasks.json",
+        "数据源：~/.claude/stats-cache.json",
+        "依赖：rich 库（需先安装 pip3 install rich）",
+        "参考方案 v2 第 186-341 行的核心代码框架",
+        "Agent 状态推断逻辑见方案 v2 第 67-79 行"
+      ],
+      "status": "pending"
+    },
+    {
+      "subtask_id": "SUB-036-002",
+      "title": "创建快捷启动脚本（sansheng-monitor）",
+      "assigned_to": "gongbu-works",
+      "type": "tooling",
+      "priority": 2,
+      "dependencies": ["SUB-036-001"],
+      "description": "创建命令行快捷方式，方便用户启动监控工具",
+      "deliverables": [
+        "bin/sansheng-monitor - Bash 启动脚本",
+        "可执行权限（chmod +x）"
+      ],
+      "acceptance_criteria": [
+        "能通过 sansheng-monitor 直接启动",
+        "支持参数透传给 monitor.py（$@ 参数）"
+      ],
+      "estimated_hours": 0.5,
+      "technical_notes": [
+        "参考方案 v2 第 360-370 行"
+      ],
+      "status": "pending"
+    },
+    {
+      "subtask_id": "SUB-036-003",
+      "title": "编写使用文档（可选）",
+      "assigned_to": "libu2-rites",
+      "type": "documentation",
+      "priority": 3,
+      "dependencies": ["SUB-036-001"],
+      "description": "在 monitor.py 中添加详细注释或创建独立使用文档",
+      "deliverables": [
+        "选项 A: monitor.py 中的 docstring 和行内注释",
+        "选项 B: docs/monitor-usage.md 独立文档"
+      ],
+      "acceptance_criteria": [
+        "说明如何启动（命令行用法）",
+        "说明如何退出（Ctrl+C）",
+        "说明界面各部分含义（Token 统计、任务列表）",
+        "说明依赖安装（pip3 install rich）"
+      ],
+      "estimated_hours": 0.5,
+      "technical_notes": [
+        "此任务可与 SUB-036-001 并行执行",
+        "如果时间紧张，可只在代码中添加注释（不创建独立文档）"
+      ],
+      "status": "pending"
+    }
+  ],
+  "execution_plan": {
+    "phase_1": {
+      "subtasks": ["SUB-036-001"],
+      "description": "工部开发核心监控工具"
+    },
+    "phase_2": {
+      "subtasks": ["SUB-036-002"],
+      "description": "工部创建快捷启动脚本（依赖 phase_1）"
+    },
+    "phase_3": {
+      "subtasks": ["SUB-036-003"],
+      "description": "礼部编写文档（可选，可与 phase_1 并行）"
+    }
+  },
+  "notes": [
+    "本任务以工部为主力，无需其他四部参与（吏部/户部/兵部/刑部）",
+    "文档任务（礼部）为可选，如果工部在代码中添加足够注释则可跳过",
+    "执行模式：串行（phase_1 → phase_2，phase_3 可并行）",
+    "预计总工时：4 小时"
+  ]
+}

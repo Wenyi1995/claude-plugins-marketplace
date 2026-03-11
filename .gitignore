@@ -1,0 +1,31 @@
+# 运行时数据
+sansheng-pipeline/data/tasks.json
+sansheng-pipeline/data/*plan*.md
+sansheng-pipeline/data/audit/*.jsonl
+
+# 构建产物
+sansheng-pipeline/mcp-server/node_modules/
+sansheng-pipeline/mcp-server/dist/
+
+# Python 缓存
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 临时文件
+*.tmp
+*.bak
+*.log

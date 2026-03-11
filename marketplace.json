@@ -1,0 +1,31 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "wenyi1995",
+  "description": "三省六部决策流程插件市场",
+  "owner": {
+    "name": "Wenyi1995",
+    "email": "tianyipc@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "sansheng-pipeline",
+      "description": "三省六部审议流程：中书省起草方案、门下省审议质量、尚书省六部执行任务。基于 MCP Server 实现，支持多版本方案、封驳机制、审计日志。",
+      "version": "0.3.0",
+      "author": {
+        "name": "Wenyi1995",
+        "email": "tianyipc@gmail.com"
+      },
+      "source": "./sansheng-pipeline",
+      "category": "development",
+      "homepage": "https://github.com/Wenyi1995/claude-plugins-marketplace",
+      "keywords": [
+        "workflow",
+        "decision-making",
+        "three-departments",
+        "six-ministries",
+        "chinese-bureaucracy",
+        "agent-collaboration"
+      ]
+    }
+  ]
+}

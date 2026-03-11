@@ -1,0 +1,19 @@
+{
+  "name": "sansheng-mcp-server",
+  "version": "0.1.0",
+  "main": "dist/mcp-server.cjs",
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --outfile=dist/mcp-server.cjs --format=cjs",
+    "dev": "npm run build && node dist/mcp-server.cjs",
+    "test": "npm run build && ts-node src/test-sansheng.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "esbuild": "^0.19.11",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
