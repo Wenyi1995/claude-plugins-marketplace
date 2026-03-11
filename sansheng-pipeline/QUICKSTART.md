@@ -41,7 +41,7 @@ python3 test_pipeline.py
 **方式 2: 通过 Agent**
 
 ```
-@sililijian 请启动审议流程：优化用户列表接口的性能，现在加载太慢
+@silijian 请启动审议流程：优化用户列表接口的性能，现在加载太慢
 ```
 
 ---
@@ -175,7 +175,7 @@ else:
 
 **检查 Agent 是否存在**：
 ```bash
-ls -la ~/.claude/agents/ | grep -E 'zhongshu|menxia|sililijian'
+ls -la ~/.claude/agents/ | grep -E 'zhongshu|menxia|silijian'
 ```
 
 如果不存在，需要在 Claude Code 中注册 Agent：

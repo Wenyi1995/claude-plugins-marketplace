@@ -41,7 +41,7 @@ def agent_handoff(from_agent: str, to_agent: str, message: Dict[str, Any]) -> Ha
         raise Exception("Handoff failed: network timeout")
 
 
-def escalate_to_sililijian(error_info: Dict[str, Any]) -> None:
+def escalate_to_silijian(error_info: Dict[str, Any]) -> None:
     """
     将错误信息升级到司礼监（占位函数）
 
@@ -99,7 +99,7 @@ def handoff_with_retry(
         except Exception as e:
             if retry_count == max_retries:
                 # 超过最大重试次数，升级到司礼监
-                escalate_to_sililijian({
+                escalate_to_silijian({
                     "error": "handoff_failed",
                     "from": from_agent,
                     "to": to_agent,
@@ -122,7 +122,7 @@ if __name__ == "__main__":
     print("=== 测试用例 1: 成功的 handoff（无重试）===")
     try:
         result = handoff_with_retry(
-            from_agent="sililijian",
+            from_agent="silijian",
             to_agent="zhongshu",
             message={
                 "task_id": "TASK-20260310-001",

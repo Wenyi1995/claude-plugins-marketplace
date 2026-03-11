@@ -68,7 +68,7 @@ claude plugin install sansheng-pipeline
 
 **通过 Agent**：
 ```
-@sililijian 请启动审议流程：[任务描述]
+@silijian 请启动审议流程：[任务描述]
 ```
 
 ---
@@ -79,7 +79,7 @@ claude plugin install sansheng-pipeline
 
 | Agent | 职责 | 关键能力 |
 |-------|------|---------|
-| **司礼监** (sililijian) | 流程协调者 | 接旨、协调三省、处理升级、回报 |
+| **司礼监** (silijian) | 流程协调者 | 接旨、协调三省、处理升级、回报 |
 | **中书省** (zhongshu) | 方案规划者 | 起草方案、响应封驳修改 |
 | **门下省** (menxia) | 方案审议者 | 审议质量、封驳不合格、控制轮次 |
 | **尚书省** (shangshu) | 任务派发者（预留） | 拆解任务、派发执行、汇总成果 |

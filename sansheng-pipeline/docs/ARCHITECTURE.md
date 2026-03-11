@@ -606,7 +606,7 @@ const result = await callPythonFunction(
     agent_name: 'zhongshu',
     message: {
       task_id: 'TASK-20260311-001',
-      from_agent: 'sililijian',
+      from_agent: 'silijian',
       to_agent: 'zhongshu',
       action: 'draft',
       content: { instruction: '请起草执行方案' },

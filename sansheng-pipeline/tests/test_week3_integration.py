@@ -12,7 +12,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent / 'lib'))
 
 from timeout_monitor import dispatch_with_timeout
-from notification import notify_sililijian, escalate_to_sililijian
+from notification import notify_silijian, escalate_to_silijian
 
 
 def test_integrated_workflow():
@@ -34,12 +34,12 @@ def test_integrated_workflow():
 
     def handle_80_warning(alert_info):
         print(f"\n>>> 二级告警处理器触发 <<<")
-        notify_sililijian(alert_info)
+        notify_silijian(alert_info)
         print()
 
     def handle_timeout(alert_info):
         print(f"\n>>> 超时处理器触发 <<<")
-        escalate_to_sililijian(alert_info)
+        escalate_to_silijian(alert_info)
         print()
 
     # 执行带监控的任务派发
@@ -74,7 +74,7 @@ def test_timeout_escalation():
 
     def handle_timeout(alert_info):
         print(f"\n>>> 触发升级流程 <<<")
-        event_id = escalate_to_sililijian(alert_info)
+        event_id = escalate_to_silijian(alert_info)
         print(f"升级事件已记录: {event_id}\n")
 
     result = dispatch_with_timeout(
@@ -118,7 +118,7 @@ def test_alert_logging():
 
     event_ids = []
     for alert in alerts:
-        event_id = notify_sililijian(alert)
+        event_id = notify_silijian(alert)
         event_ids.append(event_id)
         print(f"记录告警: {event_id}")
 

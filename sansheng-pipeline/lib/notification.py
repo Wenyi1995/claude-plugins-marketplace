@@ -17,7 +17,7 @@ except ImportError:
     from audit_log import log_event
 
 
-def notify_sililijian(alert_info: Dict[str, Any]) -> str:
+def notify_silijian(alert_info: Dict[str, Any]) -> str:
     """
     通知司礼监（告警信息）
 
@@ -81,11 +81,11 @@ def notify_sililijian(alert_info: Dict[str, Any]) -> str:
     return event_id
 
 
-def escalate_to_sililijian(alert_info: Dict[str, Any]) -> str:
+def escalate_to_silijian(alert_info: Dict[str, Any]) -> str:
     """
     升级到司礼监（任务暂停，需要人工接管）
 
-    这是 notify_sililijian 的增强版本，用于 100% 超时的紧急情况
+    这是 notify_silijian 的增强版本，用于 100% 超时的紧急情况
 
     Args:
         alert_info: 告警信息字典，必须包含 action 字段
@@ -116,7 +116,7 @@ def escalate_to_sililijian(alert_info: Dict[str, Any]) -> str:
     )
 
     # 调用标准通知
-    notify_sililijian(alert_info)
+    notify_silijian(alert_info)
 
     return event_id
 
@@ -136,7 +136,7 @@ def pause_task() -> None:
 if __name__ == "__main__":
     # 自测用例
     print("=== 测试用例 1: 一级告警（50%）===")
-    event_id = notify_sililijian({
+    event_id = notify_silijian({
         "level": "一级告警",
         "agent": "zhongshu",
         "action": "draft_plan",
@@ -147,7 +147,7 @@ if __name__ == "__main__":
     print(f"审计日志 event_id: {event_id}\n")
 
     print("=== 测试用例 2: 二级告警（80%）===")
-    event_id = notify_sililijian({
+    event_id = notify_silijian({
         "level": "二级告警",
         "agent": "menxia",
         "action": "review_plan",
@@ -159,7 +159,7 @@ if __name__ == "__main__":
     print(f"审计日志 event_id: {event_id}\n")
 
     print("=== 测试用例 3: 任务暂停（100%）===")
-    event_id = escalate_to_sililijian({
+    event_id = escalate_to_silijian({
         "agent": "shangshu",
         "action": "decompose_task",
         "elapsed": 610.0,

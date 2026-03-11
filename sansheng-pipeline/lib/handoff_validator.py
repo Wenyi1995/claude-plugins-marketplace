@@ -11,7 +11,7 @@ from typing import Tuple, List, Dict, Any
 
 # 合法的 Agent ID 枚举
 VALID_AGENTS = {
-    "sililijian", "zhongshu", "menxia", "shangshu",
+    "silijian", "zhongshu", "menxia", "shangshu",
     "libu1", "hubu", "libu2", "bingbu", "xingbu", "gongbu"
 }
 
@@ -115,7 +115,7 @@ if __name__ == "__main__":
     print("=== 测试用例 1: 正常消息 ===")
     valid_message = {
         "task_id": "TASK-20260310-001",
-        "from_agent": "sililijian",
+        "from_agent": "silijian",
         "to_agent": "zhongshu",
         "action": "draft",
         "content": {
@@ -133,7 +133,7 @@ if __name__ == "__main__":
     print("\n=== 测试用例 2: 缺少必填字段 ===")
     missing_field_message = {
         "task_id": "TASK-20260310-001",
-        "from_agent": "sililijian",
+        "from_agent": "silijian",
         "action": "draft"
     }
     is_valid, errors = validate_handoff_message(missing_field_message)
@@ -143,7 +143,7 @@ if __name__ == "__main__":
     print("\n=== 测试用例 3: task_id 格式错误 ===")
     invalid_task_id_message = {
         "task_id": "TASK-123-45",
-        "from_agent": "sililijian",
+        "from_agent": "silijian",
         "to_agent": "zhongshu",
         "action": "draft",
         "content": {},
@@ -169,7 +169,7 @@ if __name__ == "__main__":
     print("\n=== 测试用例 5: 非法 action 类型 ===")
     invalid_action_message = {
         "task_id": "TASK-20260310-001",
-        "from_agent": "sililijian",
+        "from_agent": "silijian",
         "to_agent": "zhongshu",
         "action": "invalid_action",
         "content": {},
@@ -182,7 +182,7 @@ if __name__ == "__main__":
     print("\n=== 测试用例 6: timestamp 格式错误 ===")
     invalid_timestamp_message = {
         "task_id": "TASK-20260310-001",
-        "from_agent": "sililijian",
+        "from_agent": "silijian",
         "to_agent": "zhongshu",
         "action": "draft",
         "content": {},

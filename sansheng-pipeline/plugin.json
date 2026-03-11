@@ -13,10 +13,10 @@
   ],
   "agents": [
     {
-      "id": "sililijian",
+      "id": "silijian",
       "name": "司礼监",
       "role": "流程协调者",
-      "workspace": "agents/sililijian"
+      "workspace": "agents/silijian"
     },
     {
       "id": "zhongshu",

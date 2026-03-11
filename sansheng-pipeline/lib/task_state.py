@@ -56,7 +56,7 @@ def _atomic_write(tasks: List[Dict]):
         finally:
             fcntl.flock(f.fileno(), fcntl.LOCK_UN)
 
-def create_task(title: str, context: str, created_by: str = "sililijian", track: str = "normal") -> str:
+def create_task(title: str, context: str, created_by: str = "silijian", track: str = "normal") -> str:
     """
     创建新任务
 

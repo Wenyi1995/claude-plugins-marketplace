@@ -27,7 +27,7 @@ def test_basic_workflow():
     task_id = create_task(
         title="测试任务：用户注册系统",
         context="实现基于手机号+验证码的用户注册功能",
-        created_by="sililijian"
+        created_by="silijian"
     )
     print(f"✅ 创建任务: {task_id}")
 
@@ -79,7 +79,7 @@ def test_rejection_workflow():
     task_id = create_task(
         title="测试任务：性能优化",
         context="优化用户列表接口性能",
-        created_by="sililijian"
+        created_by="silijian"
     )
     print(f"✅ 创建任务: {task_id}")
 
@@ -120,7 +120,7 @@ def test_escalation_workflow():
     task_id = create_task(
         title="测试任务：认证方式改造",
         context="从 session 改为 JWT",
-        created_by="sililijian"
+        created_by="silijian"
     )
     print(f"✅ 创建任务: {task_id}")
 

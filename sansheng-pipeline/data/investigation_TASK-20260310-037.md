@@ -55,7 +55,7 @@
 ## 三、调查方法
 
 ### 步骤 1：读取系统设计文档
-- `/Users/liweizhao/.claude/plugins/sansheng-pipeline/agents/sililijian/SOUL.md`
+- `/Users/liweizhao/.claude/plugins/sansheng-pipeline/agents/silijian/SOUL.md`
 - `/Users/liweizhao/.claude/plugins/sansheng-pipeline/agents/zhongshu/SOUL.md`
 - `/Users/liweizhao/.claude/plugins/sansheng-pipeline/agents/menxia/SOUL.md`
 - `/Users/liweizhao/.claude/plugins/sansheng-pipeline/agents/shangshu/SOUL.md`

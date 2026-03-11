@@ -18,7 +18,7 @@ from handoff_validator import validate_handoff_message, VALID_AGENTS
 from audit_log import log_event, read_audit_log
 from handoff_utils import handoff_with_retry, HandoffResult, agent_handoff
 from timeout_monitor import dispatch_with_timeout
-from notification import notify_sililijian, escalate_to_sililijian
+from notification import notify_silijian, escalate_to_silijian
 
 
 class TestE2EPipeline(unittest.TestCase):
@@ -46,7 +46,7 @@ class TestE2EPipeline(unittest.TestCase):
         # 1. 司礼监派发到中书省
         handoff_1 = {
             "task_id": "TASK-20260310-001",
-            "from_agent": "sililijian",
+            "from_agent": "silijian",
             "to_agent": "zhongshu",
             "action": "draft",
             "content": {
@@ -63,7 +63,7 @@ class TestE2EPipeline(unittest.TestCase):
 
         # 记录审计日志
         event_id_1 = log_event(
-            actor_id="sililijian",
+            actor_id="silijian",
             action_type="handoff",
             target_id="zhongshu",
             result="success",
@@ -271,7 +271,7 @@ class TestE2EPipeline(unittest.TestCase):
             alert_levels.append(80)
             self.assertEqual(alert_info["percentage"], 80)
             # 通知司礼监
-            event_id = notify_sililijian(alert_info)
+            event_id = notify_silijian(alert_info)
             self.assertIsNotNone(event_id)
 
         def handle_timeout(alert_info):
@@ -279,7 +279,7 @@ class TestE2EPipeline(unittest.TestCase):
             print(f"[任务暂停] 100% 超时")
             alert_levels.append(100)
             # 升级到司礼监
-            event_id = escalate_to_sililijian(alert_info)
+            event_id = escalate_to_silijian(alert_info)
             self.assertIsNotNone(event_id)
 
         # 执行带监控的任务
@@ -452,7 +452,7 @@ class TestE2EPipeline(unittest.TestCase):
                 "dispute_summary": dispute_summary
             }
 
-            event_id = escalate_to_sililijian(escalation_info)
+            event_id = escalate_to_silijian(escalation_info)
             self.assertIsNotNone(event_id)
             print(f"✓ [升级] 事件 ID: {event_id}")
 
@@ -460,7 +460,7 @@ class TestE2EPipeline(unittest.TestCase):
             print("\n[步骤 4] 用户裁决: 准奏 v2")
             user_decision = {
                 "task_id": task_id,
-                "from_agent": "sililijian",
+                "from_agent": "silijian",
                 "to_agent": "shangshu",
                 "action": "execute",
                 "content": {

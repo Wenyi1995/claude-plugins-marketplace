@@ -162,7 +162,7 @@ Agent({
 
 如果已配置司礼监 agent：
 ```
-@sililijian 请启动审议流程：[任务描述]
+@silijian 请启动审议流程：[任务描述]
 ```
 
 ---
@@ -330,7 +330,7 @@ Agent({
 
 确保以下 agent 已在 `~/.claude/agents/` 中配置（plugin 安装时自动创建）：
 
-- `sililijian` - 司礼监
+- `silijian` - 司礼监
 - `zhongshu` - 中书省
 - `menxia` - 门下省
 - `shangshu` - 尚书省（预留）
@@ -358,7 +358,7 @@ sansheng_get_task({
 **排查**：
 ```bash
 # 检查 agent 是否存在
-ls -la ~/.claude/agents/ | grep -E 'zhongshu|menxia|sililijian'
+ls -la ~/.claude/agents/ | grep -E 'zhongshu|menxia|silijian'
 
 # 查看 agent 的 SOUL.md
 cat ~/.claude/agents/zhongshu/SOUL.md | head -20
