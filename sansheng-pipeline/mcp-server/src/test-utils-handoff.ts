@@ -43,56 +43,6 @@ async function main() {
   console.log('无效消息验证:', validation2);
   console.log('✓ 通过\n');
 
-  // ========== 测试 4: 列出可用 Agent ==========
-  console.log('【测试 4】listAvailableAgents');
-  const agents = await handoff.listAvailableAgents();
-  console.log('可用 Agent 列表:', agents);
-  console.log('✓ 通过\n');
-
-  // ========== 测试 5: 检查特定 Agent 是否可用 ==========
-  console.log('【测试 5】checkAgentAvailable');
-  const zhongshuAvailable = await handoff.checkAgentAvailable('zhongshu');
-  console.log('中书省可用性:', zhongshuAvailable);
-
-  const invalidAgentAvailable = await handoff.checkAgentAvailable('nonexistent');
-  console.log('不存在的 Agent 可用性:', invalidAgentAvailable);
-  console.log('✓ 通过\n');
-
-  // ========== 测试 6: 真实 Handoff（需要真实任务 ID）==========
-  console.log('【测试 6】真实 Handoff（创建测试任务）');
-
-  // 6.1 创建测试任务
-  const createTaskResult = utils.callPythonFunction(
-    'task_state',
-    'create_task',
-    ['测试任务 - utils & handoff', '测试 handoff 机制', 'test-suite'],
-    false
-  );
-
-  if (createTaskResult.success) {
-    const taskId = createTaskResult.data;
-    console.log('创建测试任务:', taskId);
-
-    // 6.2 Handoff 到中书省
-    const handoffMessage: handoff.HandoffMessage = {
-      task_id: taskId,
-      action: 'draft',
-      content: {},
-    };
-
-    console.log('\nHandoff 到中书省起草方案...');
-    const handoffResponse = await handoff.handoffToAgent('zhongshu', handoffMessage);
-    console.log('Handoff 响应:', JSON.stringify(handoffResponse, null, 2));
-
-    if (handoffResponse.success) {
-      console.log('✓ Handoff 成功');
-      console.log('生成的方案版本:', handoffResponse.result?.version);
-    } else {
-      console.log('✗ Handoff 失败:', handoffResponse.error);
-    }
-  } else {
-    console.log('✗ 创建任务失败:', createTaskResult.error);
-  }
 
   console.log('\n=== 所有测试完成 ===');
 }

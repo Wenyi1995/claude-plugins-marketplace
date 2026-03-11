@@ -36,6 +36,114 @@
 
 ---
 
+## 工作流程详解
+
+### Phase 1: 创建任务
+
+使用 MCP tool 创建任务：
+
+```
+sansheng_create_task({
+  title: "任务标题",
+  context: "任务背景和需求..."
+})
+→ 返回 task_id: "TASK-20260311-XXX"
+```
+
+### Phase 2: 中书省起草方案
+
+调用中书省 Agent：
+
+```
+Agent({
+  subagent_type: "sansheng-pipeline:zhongshu:SOUL",
+  description: "中书省起草方案",
+  prompt: `
+## 中书省任务
+任务 ID: ${task_id}
+背景：${context}
+
+请根据上述背景起草执行方案，包含：
+1. 任务背景
+2. 实施方案（5个步骤）
+3. 风险评估
+4. 验收标准
+
+完成后调用 MCP tool：
+sansheng_submit_plan({
+  task_id: "${task_id}",
+  plan: "你生成的方案内容"
+})
+  `
+})
+```
+
+### Phase 3: 门下省审议
+
+调用门下省 Agent：
+
+```
+Agent({
+  subagent_type: "sansheng-pipeline:menxia:SOUL",
+  description: "门下省审议方案",
+  prompt: `
+## 门下省任务
+任务 ID: ${task_id}
+
+请审议中书省提交的方案：
+1. 调用 sansheng_get_task({ task_id: "${task_id}" }) 获取方案
+2. 根据审议标准检查方案质量
+3. 调用 sansheng_submit_decision 提交决策
+
+审议标准：
+- 第1次审议：检查风险评估
+- 第2次审议：检查验收标准
+- 第3次审议：建议升级司礼监裁决
+  `
+})
+```
+
+### Phase 4: 处理封驳循环
+
+如果门下省封驳（decision = "rejected"）：
+
+1. 提取封驳理由
+2. 将封驳理由添加到 context 中，格式：
+   ```
+   {原始context}
+
+   【门下省封驳意见】
+   {rejection_reason}
+   ```
+3. 回到 Phase 2，重新调用中书省 Agent
+
+### Phase 5: 准奏后用户确认
+
+如果门下省准奏（decision = "approved"）：
+
+1. 向用户展示最终方案
+2. 等待用户批准
+3. 用户批准后调用：
+   ```
+   sansheng_finalize({
+     task_id: "${task_id}",
+     decision: "approve_zhongshu"
+   })
+   ```
+
+### Phase 6: 升级司礼监裁决
+
+如果第3次封驳（rejection_count >= 3）：
+
+1. 向用户说明情况
+2. 展示中书省最新方案和门下省意见
+3. 请用户裁决：
+   - 批准中书省方案：`decision: "approve_zhongshu"`
+   - 采纳门下省意见：`decision: "approve_menxia"`
+   - 自定义方案：`decision: "custom", custom_plan: "..."`
+
+---
+
 ## 使用方式
 
 ### 方式 1: 直接调用（推荐）
@@ -55,6 +163,89 @@
 如果已配置司礼监 agent：
 ```
 @sililijian 请启动审议流程：[任务描述]
+```
+
+---
+
+## 可用 MCP Tools
+
+本 skill 使用以下 MCP tools 进行状态管理：
+
+### 1. sansheng_create_task
+
+创建新任务，返回任务 ID。
+
+**输入**：
+- `title`: 任务标题
+- `context`: 任务背景和需求
+
+**输出**：
+```json
+{
+  "task_id": "TASK-20260311-XXX"
+}
+```
+
+### 2. sansheng_submit_plan
+
+中书省提交方案版本（由中书省 Agent 调用）。
+
+**输入**：
+- `task_id`: 任务 ID
+- `plan`: 方案内容
+
+**输出**：
+```json
+{
+  "version": 1,
+  "task_id": "TASK-20260311-XXX"
+}
+```
+
+### 3. sansheng_submit_decision
+
+门下省提交审议决策（由门下省 Agent 调用）。
+
+**输入**：
+- `task_id`: 任务 ID
+- `decision`: "approved" 或 "rejected"
+- `reason`: 封驳理由（仅 rejected 时需要）
+
+**输出**：
+```json
+{
+  "decision": "rejected",
+  "reason": "...",
+  "rejection_count": 1,
+  "escalated": false
+}
+```
+
+### 4. sansheng_get_task
+
+查询任务状态和历史（由门下省 Agent 调用）。
+
+**输入**：
+- `task_id`: 任务 ID
+
+**输出**：完整任务对象，包含状态历史、方案版本、封驳记录。
+
+### 5. sansheng_finalize
+
+用户批准方案，进入执行阶段。
+
+**输入**：
+- `task_id`: 任务 ID
+- `decision`: "approve_zhongshu" / "approve_menxia" / "custom"
+- `custom_plan`: 自定义方案内容（仅 custom 时需要）
+
+**输出**：
+```json
+{
+  "success": true,
+  "final_state": "done",
+  "message": "圣上批准方案，任务进入执行阶段"
+}
 ```
 
 ---
@@ -83,11 +274,12 @@
 ```
 
 **流程**：
-1. 司礼监收集信息：当前表结构、用户量、权限系统实现
-2. 中书省起草：迁移方案 + 权限适配 + 回滚步骤
-3. 门下省审议：检查迁移脚本、评估风险
-4. 用户确认定稿
-5. 产出：可执行的迁移方案
+1. 创建任务：`sansheng_create_task()` 生成 task_id
+2. 司礼监收集信息：当前表结构、用户量、权限系统实现
+3. 中书省起草：调用 Agent 生成迁移方案 + 权限适配 + 回滚步骤
+4. 门下省审议：调用 Agent 检查迁移脚本、评估风险
+5. 用户确认：`sansheng_finalize()` 定稿
+6. 产出：可执行的迁移方案
 
 ---
 
@@ -100,13 +292,14 @@
 ```
 
 **流程**：
-1. 司礼监整理：读取代码、分析瓶颈
-2. 中书省起草：分页 + 索引 + 缓存方案
-3. 门下省审议：要求补充性能基准测试（第1次封驳）
-4. 中书省修改：增加压测计划
-5. 门下省准奏
-6. 用户确认定稿
-7. 产出：完整优化方案 + 测试计划
+1. 创建任务：`sansheng_create_task()`
+2. 司礼监整理：读取代码、分析瓶颈
+3. 中书省起草：调用 Agent 生成分页 + 索引 + 缓存方案
+4. 门下省审议：调用 Agent，封驳要求补充性能基准测试（第1次封驳）
+5. 中书省修改：再次调用 Agent，增加压测计划
+6. 门下省准奏：`sansheng_submit_decision({ decision: "approved" })`
+7. 用户确认：`sansheng_finalize()`
+8. 产出：完整优化方案 + 测试计划
 
 ---
 
@@ -118,15 +311,16 @@
 ```
 
 **流程**：
-1. 中书省方案：全面切换 JWT
-2. 门下省封驳：未考虑旧 session 用户的迁移（第1次）
-3. 中书省修改：增加双模式兼容期
-4. 门下省封驳：兼容期太长（30天），建议7天（第2次）
-5. 中书省坚持：30天更安全
-6. 门下省封驳：仍建议7天（第3次） → **升级用户裁决**
-7. 司礼监询问用户：7天 vs 30天？
-8. 用户选择：折中14天
-9. 产出：14天兼容期方案
+1. 创建任务：`sansheng_create_task()`
+2. 中书省方案：调用 Agent 生成全面切换 JWT 方案
+3. 门下省封驳：调用 Agent 审议，封驳未考虑旧 session 用户的迁移（第1次）
+4. 中书省修改：再次调用 Agent，增加双模式兼容期
+5. 门下省封驳：兼容期太长（30天），建议7天（第2次）
+6. 中书省坚持：30天更安全
+7. 门下省封驳：仍建议7天（第3次，`rejection_count = 3`） → **升级用户裁决**
+8. 司礼监询问用户：7天 vs 30天？
+9. 用户选择：折中14天，调用 `sansheng_finalize({ decision: "custom", custom_plan: "14天兼容期" })`
+10. 产出：14天兼容期方案
 
 ---
 
@@ -141,29 +335,17 @@
 - `menxia` - 门下省
 - `shangshu` - 尚书省（预留）
 
-### 查看任务历史
+### 查看任务状态
 
-```bash
-cd ~/.claude/plugins/sansheng-pipeline
-python3 -c "
-import sys; sys.path.insert(0, 'lib')
-from task_state import list_tasks
-for t in list_tasks()[:10]:
-    print(f\"{t['id']}: {t['state']} - {t['title']}\")
-"
+使用 MCP tool 查询任务：
+
+```
+sansheng_get_task({
+  task_id: "TASK-20260310-001"
+})
 ```
 
-### 查看任务详情
-
-```bash
-python3 -c "
-import sys; sys.path.insert(0, 'lib')
-from task_state import get_task
-import json
-task = get_task('TASK-20260310-001')
-print(json.dumps(task, ensure_ascii=False, indent=2))
-"
-```
+返回包含完整状态历史、方案版本、封驳记录的任务对象。
 
 ---
 
@@ -208,22 +390,14 @@ echo '[]' > data/tasks.json
 **症状**：门下省已封驳3次但未触发升级
 
 **排查**：
-```bash
-python3 -c "
-import sys; sys.path.insert(0, 'lib')
-from task_state import get_task, get_rejection_count
-task_id = 'TASK-20260310-001'
-count = get_rejection_count(task_id)
-print(f'封驳次数: {count}')
-task = get_task(task_id)
-for i, r in enumerate(task['rejections'], 1):
-    print(f\"{i}. {r['timestamp']}: {r['reason'][:50]}...\")
-"
-```
+使用 `sansheng_get_task({ task_id: "TASK-20260310-001" })` 查看任务状态，检查：
+- `rejection_count` 字段的值
+- `escalated` 字段是否为 true
+- `rejections` 数组中的封驳记录
 
 **解决**：
-- 如果 `count >= 2`，门下省应触发升级而非继续封驳
-- 检查门下省 SOUL.md 中的逻辑
+- 如果 `rejection_count >= 3`，门下省应触发升级而非继续封驳
+- 检查门下省 SOUL.md 中的逻辑是否正确调用 `sansheng_submit_decision`
 
 ---
 
